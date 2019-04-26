@@ -29,12 +29,13 @@
     url : http://pkg.jenkins.io/redhat/jenkins.repo
     dest: /etc/yum.repos.d/jenkins.repo
 - name: Install Jenkins
-  shell : |
-    rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
-    yum install jenkins -y
-    service jenkins start
-  args: 
-    warn: no
+  command : "rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key"
+- name: Install Jenkins  
+  yum:
+    name: jenkins
+    state: present
+- name: "Start Jenkins"
+  service: name="jenkins" state="started"
 - name: Connect to Jenkins
   pause:
     prompt: "Have you connected to Jenkins to get initial password created? If so, Type 'Yes'"
