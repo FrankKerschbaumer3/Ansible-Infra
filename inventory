@@ -1,0 +1,4 @@
+localhost    ansible_connection=local
+
+[jenkins]
+ec2-54-225-56-184.compute-1.amazonaws.com    ansible_user=ec2-user

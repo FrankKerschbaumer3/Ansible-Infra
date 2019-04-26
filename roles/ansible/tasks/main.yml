@@ -1,0 +1,11 @@
+---                        
+- name: "Install Ansible"
+  pip:
+    name: ansible
+- name: "Check Ansible Version"
+  shell: ansible --version
+  become: false
+  register: as
+
+- debug: var=as.stdout_lines
+

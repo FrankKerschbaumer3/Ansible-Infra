@@ -1,0 +1,8 @@
+---
+- name: Update Ansible Hosts with created ec2 instance hostname. 
+  hosts: local
+  connection: local
+
+  tasks:
+  - name: "Updating Ansible hosts"
+    command: "sh Files/replacehosts.sh"

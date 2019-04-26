@@ -1,0 +1,30 @@
+---                        
+- name: "Create Jenkins Instance"
+  cloudformation:
+    stack_name: "jenkins-instance"
+    region: us-east-1
+    state: present
+    disable_rollback: false
+    template: "{{ role_path }}/files/single_instance.yml"
+    template_parameters:
+      KeyName: MacOS
+    tags:           
+      Stack: jenkins-instance
+
+- name: "Output Jenkins Resource"
+  cloudformation_facts:
+    stack_name: "jenkins-instance"
+
+- name: "Output DNS"
+  debug:
+    msg: "{{ ansible_facts['cloudformation']['jenkins-instance']['stack_outputs']['PublicDNS'] }}"
+  when: (ansible_facts['cloudformation']['jenkins-instance'] is defined) and (ansible_facts['cloudformation']['jenkins-instance']['stack_description']['stack_status'] == "CREATE_COMPLETE")
+
+- name: "Hostname Variable"
+  set_fact: 
+    jenkins_hostname: "{{ ansible_facts['cloudformation']['jenkins-instance']['stack_outputs']['PublicDNS'] }}"
+
+- name: "Create Inventory File"
+  template:
+    src: inventory.txt.j2
+    dest: inventory

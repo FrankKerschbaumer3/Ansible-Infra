@@ -1,0 +1,12 @@
+---                        
+- name: "Create Jenkins Instance"
+  cloudformation:
+    stack_name: "jenkins-instance"
+    region: us-east-1
+    state: absent
+    disable_rollback: false
+    template: "{{ role_path }}/files/single_instance.yml"
+    template_parameters:
+      KeyName: MacOS
+    tags:           
+      Stack: jenkins-instance
