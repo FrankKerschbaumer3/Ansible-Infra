@@ -3,43 +3,54 @@
   yum :
     name: '*'
     state: latest
+
 - name: Install Git
   yum :
     name: git
     state: latest
+
 - name: Install Docker
   yum :
     name: docker
     state: latest
+
 - name: Install openJDK 8
   yum :
     name: java-1.8.0-openjdk
     state: latest
+
 - name: Remove Java 1.7.0
   yum:
     name: java-1.7.0-openjdk
     state: absent
+
 - shell: "echo $JAVA_HOME"
   environment:
     JAVA_HOME: "/usr/lib/jvm/jre-1.8.0-openjdk.x86_64"
   register: shellout
 - debug: var=shellout
+
 - name: Download Jenkins
   get_url:
     url : http://pkg.jenkins.io/redhat/jenkins.repo
     dest: /etc/yum.repos.d/jenkins.repo
+
 - name: Install Jenkins
   command : "rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key"
+
 - name: Install Jenkins  
   yum:
     name: jenkins
     state: present
+
 - name: "Start Jenkins"
   service: name="jenkins" state="started"
+
 - name: Connect to Jenkins
   pause:
     prompt: "Have you connected to Jenkins to get initial password created? If so, Type 'Yes'"
     echo: Yes
+
 - name: Find out what the remote machine's mounts are
   slurp:
     src: /var/lib/jenkins/secrets/initialAdminPassword
